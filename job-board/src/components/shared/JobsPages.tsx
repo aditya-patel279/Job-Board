@@ -180,9 +180,11 @@ export const JobDetailPage: React.FC<{ jobId: string; onNavigate: (p: string) =>
           </Button>
         )}
         {user?.role === 'applicant' && job.status === 'open' && !hasApplied && (
-          <Button onClick={() => onNavigate(`/jobs/${jobId}`)} data-testid="apply-button"
+          <Button
+            data-testid="apply-button"
             className="apply-cta"
             onClick={() => {
+              onNavigate(`/jobs/${jobId}`);
               const event = new CustomEvent('open-apply-modal', { detail: { jobId } });
               window.dispatchEvent(event);
             }}
