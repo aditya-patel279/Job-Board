@@ -17,7 +17,10 @@ function AppInner() {
   const { path, navigate, matchPath } = useRouter();
   const [applyJob, setApplyJob] = useState<Job | null>(null);
   const [toasts, setToasts] = useState<ToastData[]>([]);
-  const [isLightTheme, setIsLightTheme] = useState(() => localStorage.getItem('jb_theme') === 'light');
+  const [isLightTheme, setIsLightTheme] = useState(() => {
+    const saved = localStorage.getItem('jb_theme');
+    return saved ? saved === 'light' : true;
+  });
   const [showGreeting, setShowGreeting] = useState(true);
 
   // Mark greeting as shown when dismissed
