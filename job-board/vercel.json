@@ -3,23 +3,3 @@
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
-```
-
-This tells Vercel: "for any URL, just serve `index.html` and let the client-side router handle it."
-
-**Second cause — wrong build output directory**
-
-Vercel might be looking in the wrong folder. Make sure your Vercel project settings match Vite's defaults:
-
-- Framework Preset: `Vite`
-- Build Command: `npm run build`
-- Output Directory: `dist`
-- Install Command: `npm install`
-
-You can check these in your Vercel dashboard under **Settings → General → Build & Development Settings**.
-
-**Third cause — environment not set to production**
-
-If you see a blank page rather than a 404, check the browser console for errors. Vite sometimes has issues if `NODE_ENV` isn't set. In Vercel dashboard go to **Settings → Environment Variables** and add:
-```
-NODE_ENV = production
