@@ -1,9 +1,14 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 
-interface Props { onNavigate: (path: string) => void; currentPath: string; }
+interface Props {
+  onNavigate: (path: string) => void;
+  currentPath: string;
+  theme: 'light' | 'dark';
+  onToggleTheme: () => void;
+}
 
-export const Navbar: React.FC<Props> = ({ onNavigate, currentPath }) => {
+export const Navbar: React.FC<Props> = ({ onNavigate, currentPath, theme, onToggleTheme }) => {
   const { user, logout } = useAuth();
 
   const handleLogout = () => { logout(); onNavigate('/'); };
@@ -55,6 +60,15 @@ export const Navbar: React.FC<Props> = ({ onNavigate, currentPath }) => {
         </div>
 
         <div className="nav-actions">
+          <button
+            className="btn btn-ghost btn-sm btn-theme-toggle"
+            onClick={onToggleTheme}
+            title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            data-testid="theme-toggle"
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+
           {user ? (
             <div className="nav-user" data-testid="nav-user">
               <span className="nav-user-name" data-testid="nav-user-name">{user.name}</span>
@@ -70,6 +84,14 @@ export const Navbar: React.FC<Props> = ({ onNavigate, currentPath }) => {
               </button>
               <button className="btn btn-primary btn-sm" onClick={() => onNavigate('/register')} data-testid="nav-register">
                 Sign up
+              </button>
+              <button
+                className="btn btn-roadmap btn-sm"
+                onClick={() => window.open('/playwright-roadmap.html', '_blank', 'noopener,noreferrer')}
+                data-testid="nav-roadmap"
+                title="Ashlesha's Playwright Learning Roadmap"
+              >
+                🎭 PW Roadmap
               </button>
             </div>
           )}

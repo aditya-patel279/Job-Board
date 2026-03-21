@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playwright Roadmap for Ashlesha 🎭</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0c0e;
+      --bg2: #131316;
+      --bg3: #1a1a1f;
+      --bg4: #222228;
+      --bg5: #2a2a32;
+      --border: #25252d;
+      --border2: #32323c;
+      --text: #eeeef2;
+      --text2: #8e8ea8;
+      --text3: #52526a;
+      --accent: #6c63ff;
+      --accent2: #8b83ff;
+      --green: #22c55e;
+      --green2: #86efac;
+      --amber: #f59e0b;
+      --amber2: #fcd34d;
+      --purple: #a855f7;
+      --purple2: #d8b4fe;
+      --blue: #3b82f6;
+      --blue2: #93c5fd;
+      --pink: #ec4899;
+      --pink2: #f9a8d4;
+      --font: 'DM Sans', sans-serif;
+      --font-serif: 'Instrument Serif', serif;
+      --font-mono: 'DM Mono', monospace;
+      --r: 10px;
+      --r-sm: 6px;
+      --r-lg: 14px;
+      --r-xl: 20px;
+    }
+
+    body.light-theme {
+      --bg: #ffffff;
+      --bg2: #f9fafb;
+      --bg3: #f3f4f6;
+      --bg4: #e5e7eb;
+      --bg5: #d1d5db;
+      --border: #e5e7eb;
+      --border2: #d1d5db;
+      --text: #111827;
+      --text2: #4b5563;
+      --text3: #9ca3af;
+      --accent: #4f46e5;
+      --accent2: #6366f1;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0c0c0e 0%, #13131a 40%, #1a1228 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 24px;
+      text-align: center;
+      position: relative;
+    }
+    body.light-theme .hero {
+      background: linear-gradient(135deg, #f3f4f6 0%, #ffffff 100%);
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(108,99,255,0.15), transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.2);
+      border-radius: 100px; padding: 6px 16px;
+      font-size: 13px; font-weight: 500; color: var(--accent2);
+      margin-bottom: 24px;
+    }
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(40px, 8vw, 64px);
+      line-height: 1.1; letter-spacing: -1px; margin-bottom: 16px;
+    }
+    .hero-title .highlight {
+      background: linear-gradient(to right, var(--accent2), var(--purple2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle { font-size: 18px; color: var(--text2); max-width: 600px; margin: 0 auto; }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      position: fixed; bottom: 30px; right: 30px;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--bg2); border: 1px solid var(--border);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: var(--text); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .theme-toggle:hover { transform: scale(1.1); background: var(--bg3); border-color: var(--accent); }
+    body.light-theme .theme-toggle { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+    /* ── MAIN ── */
+    .main { max-width: 900px; margin: 0 auto; padding: 64px 24px 100px; }
+
+    .section-header { margin-bottom: 32px; }
+    .section-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); }
+
+    /* ── ACCORDION ── */
+    .phase {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r-xl); margin-bottom: 16px;
+      transition: all 0.3s ease; overflow: hidden;
+    }
+    .phase:hover { border-color: var(--border2); }
+    .phase.active { border-color: var(--accent); background: var(--bg3); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
+
+    .phase-header {
+      width: 100%; border: none; background: none; padding: 28px 32px;
+      display: flex; align-items: center; gap: 24px; cursor: pointer; text-align: left;
+    }
+    .phase-icon {
+      width: 52px; height: 52px; border-radius: var(--r-lg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0; transition: transform 0.3s ease;
+    }
+    .phase.active .phase-icon { transform: scale(1.1); }
+
+    .phase-icon.p1 { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); }
+    .phase-icon.p2 { background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.2); }
+    .phase-icon.p3 { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); }
+    .phase-icon.p4 { background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.2); }
+    .phase-icon.p5 { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2); }
+    .phase-icon.p6 { background: rgba(236,72,153,0.1); border: 1px solid rgba(236,72,153,0.2); }
+
+    .phase-info { flex: 1; }
+    .phase-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text3); margin-bottom: 4px; display: block; }
+    .phase-title { font-size: 20px; font-weight: 600; color: var(--text); }
+
+    .phase-arrow {
+      width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text3); transition: all 0.3s ease;
+    }
+    .phase.active .phase-arrow { transform: rotate(180deg); background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    /* CONTENT CLAMP */
+    .phase-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .phase.active .phase-body { max-height: 3000px; }
+
+    .phase-content { padding: 0 32px 32px 108px; border-top: 1px solid var(--border); padding-top: 32px; margin-top: -1px; }
+
+    /* DETAIL BLOCKS */
+    .detail-block { margin-bottom: 32px; }
+    .detail-heading { font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--accent2); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .detail-heading::after { content: ''; flex: 1; height: 1px; background: var(--border2); }
+    .detail-body { font-size: 15px; color: var(--text2); line-height: 1.7; }
+    .detail-body strong { color: var(--text); }
+    .detail-body code { background: var(--bg4); padding: 2px 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 13px; color: var(--accent2); }
+
+    /* CHECKLIST */
+    .task-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+    .task-item { display: flex; gap: 12px; padding: 16px; background: var(--bg4); border-radius: var(--r); border: 1px solid var(--border2); }
+    .task-bullet { color: var(--green); font-size: 18px; line-height: 1; }
+    .task-text { font-size: 14px; color: var(--text); font-weight: 500; }
+    .task-sub { font-size: 12px; color: var(--text3); margin-top: 4px; display: block; font-weight: 400; }
+
+    /* CODE */
+    .code-window { background: #08080a; border: 1px solid var(--border2); border-radius: var(--r); overflow: hidden; margin: 20px 0; }
+    .code-header { background: #1a1a1f; padding: 10px 16px; font-size: 11px; color: var(--text3); display: flex; justify-content: space-between; border-bottom: 1px solid var(--border2); }
+    .code-body { padding: 20px; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: #a5b4fc; overflow-x: auto; }
+
+    /* FOOTER */
+    .footer { padding: 64px 24px; text-align: center; border-top: 1px solid var(--border); color: var(--text3); font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<button class="theme-toggle" id="theme-toggle" title="Toggle theme">🌙</button>
+
+<section class="hero">
+  <div class="hero-badge">🎭 Expert Learning Series</div>
+  <h1 class="hero-title">Ashlesha's <span class="highlight">Playwright</span> Guide</h1>
+  <p class="hero-subtitle">Click each phase below to unlock the secrets to professional E2E testing.</p>
+</section>
+
+<main class="main">
+  <div class="section-header">
+    <span class="section-label">Your Roadmap</span>
+  </div>
+
+  <!-- Phase 1 -->
+  <div class="phase" id="phase1">
+    <button class="phase-header" onclick="togglePhase('phase1')">
+      <div class="phase-icon p1">🌱</div>
+      <div class="phase-info">
+        <span class="phase-tag">Phase 1</span>
+        <span class="phase-title">Foundations: The "Why" and "How"</span>
+      </div>
+      <div class="phase-arrow">↓</div>
+    </button>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="detail-block">
+          <div class="detail-heading">Modern E2E Testing</div>
+          <div class="detail-body">
+            <strong>End-to-End (E2E) testing</strong> means testing the entire application flow from start to finish. In HireBoard, this means starting at the landing page, logging in, and verifying you reach the dashboard—just like a real user.
+            <br/><br/>
+            <strong>Playwright</strong> is Microsoft's answer to flaky tests. It is built to be "evergreen," meaning it handles modern web apps (React, Vue, etc.) effortlessly by automatically waiting for elements to appear before interacting with them.
+          </div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-heading">Understanding the Config</div>
+          <div class="detail-body">
+            Open <code>playwright.config.ts</code>. This is the global remote control for your tests. It tells Playwright:
+            <ul style="margin-top: 12px; margin-left: 20px;">
+              <li>Where your tests are: <code>testDir: './tests/specs'</code></li>
+              <li>Your app's URL: <code>baseURL: 'http://localhost:5173'</code></li>
+              <li>How many retries: <code>retries: 1</code> (if a test fails once, try again)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase" id="phase2">
+    <button class="phase-header" onclick="togglePhase('phase2')">
+      <div class="phase-icon p2">✍️</div>
+      <div class="phase-info">
+        <span class="phase-tag">Phase 2</span>
+        <span class="phase-title">First Test: The Power Four</span>
+      </div>
+      <div class="phase-arrow">↓</div>
+    </button>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="detail-block">
+          <div class="detail-heading">The Basic Commands</div>
+          <div class="detail-body">
+            You only need 4 core commands to write 90% of your tests:
+          </div>
+          <ul class="task-list">
+            <li class="task-item">
+              <span class="task-bullet">1</span>
+              <div class="task-text">page.goto(url) <span class="task-sub">Navigates the browser to a page.</span></div>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet">2</span>
+              <div class="task-text">page.getByTestId(id) <span class="task-sub">Finds an element using the custom data-testid we added for you.</span></div>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet">3</span>
+              <div class="task-text">locator.fill(text) / locator.click() <span class="task-sub">Types into an input or clicks a button.</span></div>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet">4</span>
+              <div class="task-text">expect(locator).toBeVisible() <span class="task-sub">The "Assertion" — checking that the result is what you expected.</span></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase" id="phase3">
+    <button class="phase-header" onclick="togglePhase('phase3')">
+      <div class="phase-icon p3">🏗️</div>
+      <div class="phase-info">
+        <span class="phase-tag">Phase 3</span>
+        <span class="phase-title">Page Object Model (POM)</span>
+      </div>
+      <div class="phase-arrow">↓</div>
+    </button>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="detail-block">
+          <div class="detail-heading">Why POM?</div>
+          <div class="detail-body">
+            If a button's ID changes and you have 20 tests using it, you don't want to edit 20 files. 
+            <strong>POM</strong> lets you define the "login button" once in a <code>LoginPage</code> class. All tests then use that class. Update it once, and every test is fixed instantly.
+          </div>
+        </div>
+        <div class="code-window">
+          <div class="code-header"><span>LoginPage.ts</span></div>
+          <div class="code-body">
+            export class LoginPage {<br/>
+            &nbsp;&nbsp;get emailInput() { return this.page.getByTestId('email-input'); }<br/>
+            &nbsp;&nbsp;async login(email, pass) { ... }<br/>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase" id="phase4">
+    <button class="phase-header" onclick="togglePhase('phase4')">
+      <div class="phase-icon p4">⚙️</div>
+      <div class="phase-info">
+        <span class="phase-tag">Phase 4</span>
+        <span class="phase-title">Advanced: Fixtures & UI Mode</span>
+      </div>
+      <div class="phase-arrow">↓</div>
+    </button>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="detail-block">
+          <div class="detail-heading">The Visual Debugger</div>
+          <div class="detail-body">
+            Run <code>npx playwright test --ui</code>. This opens a visual dashboard where you can click through every step of a test and see exactly what the browser looked like at that moment. It's like time-travel for debugging!
+          </div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-heading">Auto-recording with Codegen</div>
+          <div class="detail-body">
+            Not sure how to write a test? Run <code>npx playwright codegen localhost:5173</code>. As you click around the app, Playwright will generate the code for you in a side window!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="phase" id="phase5">
+    <button class="phase-header" onclick="togglePhase('phase5')">
+      <div class="phase-icon p5">🏢</div>
+      <div class="phase-info">
+        <span class="phase-tag">Phase 5</span>
+        <span class="phase-title">HireBoard Labs: Practice Time</span>
+      </div>
+      <div class="phase-arrow">↓</div>
+    </button>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="detail-block">
+          <div class="detail-heading">Test Scenarios</div>
+          <div class="detail-body">Try implementing these in the tests folder:</div>
+          <ul class="task-list">
+            <li class="task-item">
+              <span class="task-bullet">🎯</span>
+              <div class="task-text">The "Happy Path" Login <span class="task-sub">Login with applicant@test.com / password123 and verify the dashboard header appears.</span></div>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet">🔍</span>
+              <div class="task-text">Job Search Filter <span class="task-sub">Go to browse jobs, type "UX" in the search box, and verify the list filters correctly.</span></div>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet">📝</span>
+              <div class="task-text">Employer Job Post <span class="task-sub">Login as employer@test.com, click "Post a Job", fill the form, and verify it shows in your dashboard.</span></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 6 -->
+  <div class="phase" id="phase6">
+    <button class="phase-header" onclick="togglePhase('phase6')">
+      <div class="phase-icon p6">🏆</div>
+      <div class="phase-info">
+        <span class="phase-tag">Phase 6</span>
+        <span class="phase-title">Expert: CI/CD & Visual Regression</span>
+      </div>
+      <div class="phase-arrow">↓</div>
+    </button>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="detail-block">
+          <div class="detail-heading">Beyond Code</div>
+          <div class="detail-body">
+            <strong>CI/CD:</strong> We have GitHub Actions setup. Every time you push code, our tests run automatically on servers in the cloud to catch bugs before they reach users.
+            <br/><br/>
+            <strong>Visual Testing:</strong> <code>toHaveScreenshot()</code> takes a picture of your app and compares it to a baseline. If a single pixel changes (like a button moving slightly), it alerts you!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  Created for Ashlesha with ♥ by Antigravity
+</footer>
+
+<script>
+  function togglePhase(id) {
+    const card = document.getElementById(id);
+    const isActive = card.classList.contains('active');
+    
+    // Close all
+    document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+    
+    // Open if it wasn't active
+    if (!isActive) {
+      card.classList.add('active');
+      // Scroll into view nicely
+      setTimeout(() => {
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 300);
+    }
+  }
+
+  // Theme support
+  const themeToggle = document.getElementById('theme-toggle');
+  
+  function updateTheme(theme) {
+    if (theme === 'light') {
+      document.body.classList.add('light-theme');
+      themeToggle.innerText = '🌙';
+    } else {
+      document.body.classList.remove('light-theme');
+      themeToggle.innerText = '☀️';
+    }
+    localStorage.setItem('jb_theme', theme);
+  }
+
+  themeToggle.addEventListener('click', () => {
+    const isLight = document.body.classList.contains('light-theme');
+    updateTheme(isLight ? 'dark' : 'light');
+  });
+
+  // Load initial theme
+  const savedTheme = localStorage.getItem('jb_theme') || 'dark';
+  updateTheme(savedTheme);
+  
+  // Open first one by default
+  window.addEventListener('load', () => togglePhase('phase1'));
+</script>
+
+</body>
+</html>

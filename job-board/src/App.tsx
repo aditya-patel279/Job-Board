@@ -17,6 +17,19 @@ function AppInner() {
   const { path, navigate, matchPath } = useRouter();
   const [applyJob, setApplyJob] = useState<Job | null>(null);
   const [toasts, setToasts] = useState<ToastData[]>([]);
+  const [isLightTheme, setIsLightTheme] = useState(() => localStorage.getItem('jb_theme') === 'light');
+
+  useEffect(() => {
+    if (isLightTheme) {
+      document.body.classList.add('light-theme');
+      localStorage.setItem('jb_theme', 'light');
+    } else {
+      document.body.classList.remove('light-theme');
+      localStorage.setItem('jb_theme', 'dark');
+    }
+  }, [isLightTheme]);
+
+  const toggleTheme = () => setIsLightTheme(!isLightTheme);
 
   const addToast = (message: string, type: ToastData['type'] = 'success') => {
     const id = String(++toastCounter);
@@ -113,7 +126,12 @@ function AppInner() {
 
   return (
     <div className="app" data-testid="app">
-      <Navbar onNavigate={navigate} currentPath={path} />
+      <Navbar
+        onNavigate={navigate}
+        currentPath={path}
+        theme={isLightTheme ? 'light' : 'dark'}
+        onToggleTheme={toggleTheme}
+      />
       <main className="main-content">
         {renderPage()}
       </main>
