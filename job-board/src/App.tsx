@@ -6,7 +6,7 @@ import { LoginPage, RegisterPage } from './components/auth/AuthPages';
 import { JobsPage, JobDetailPage } from './components/shared/JobsPages';
 import { EmployerDashboard, JobFormPage, ApplicantsPage } from './components/employer/EmployerPages';
 import { ApplicantDashboard, BookmarksPage, ApplyModal } from './components/applicant/ApplicantPages';
-import { ToastContainer, type ToastData } from './components/shared/UI';
+import { ToastContainer, Modal, Button, type ToastData } from './components/shared/UI';
 import { api } from './mocks/api';
 import type { Job } from './types';
 
@@ -18,6 +18,13 @@ function AppInner() {
   const [applyJob, setApplyJob] = useState<Job | null>(null);
   const [toasts, setToasts] = useState<ToastData[]>([]);
   const [isLightTheme, setIsLightTheme] = useState(() => localStorage.getItem('jb_theme') === 'light');
+  const [showGreeting, setShowGreeting] = useState(true);
+
+  // Mark greeting as shown when dismissed
+  const handleCloseGreeting = () => {
+    setShowGreeting(false);
+    localStorage.setItem('greeting_shown', 'true');
+  };
 
   useEffect(() => {
     if (isLightTheme) {
@@ -145,6 +152,27 @@ function AppInner() {
             addToast(`Application submitted for "${applyJob.title}"!`);
           }}
         />
+      )}
+
+      {showGreeting && (
+        <Modal
+          title="🎭 Welcome, Ashlesha!"
+          onClose={handleCloseGreeting}
+          data-testid="greeting-modal"
+        >
+          <p style={{ marginBottom: '12px', fontSize: '16px', lineHeight: '1.6' }}>
+            Welcome to <strong>HireBoard</strong>, built by <strong>Aditya</strong>! 🚀
+          </p>
+          <p style={{ marginBottom: '12px', fontSize: '15px', lineHeight: '1.6', color: 'var(--text2)' }}>
+            You're about to embark on an amazing journey to master Playwright end-to-end testing. This job portal app is your playground — test it, break it, and learn from it!
+          </p>
+          <p style={{ marginBottom: '20px', fontSize: '15px', lineHeight: '1.6', color: 'var(--text2)' }}>
+            Whether you're exploring the auth flow, testing user roles, or crafting perfect locators — every phase builds your Playwright superpowers. Best of luck! You've got this! 💪
+          </p>
+          <Button onClick={handleCloseGreeting} data-testid="greeting-close-btn" className="btn-primary">
+            Let's get started
+          </Button>
+        </Modal>
       )}
 
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />
