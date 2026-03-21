@@ -161,9 +161,9 @@
     /* CONTENT CLAMP */
     .phase-body {
       max-height: 0; overflow: hidden;
-      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .phase.active .phase-body { max-height: 3000px; }
+    .phase.active .phase-body { max-height: 5000px; }
 
     .phase-content { padding: 0 32px 32px 108px; border-top: 1px solid var(--border); padding-top: 32px; margin-top: -1px; }
 
@@ -178,14 +178,22 @@
     /* CHECKLIST */
     .task-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
     .task-item { display: flex; gap: 12px; padding: 16px; background: var(--bg4); border-radius: var(--r); border: 1px solid var(--border2); }
-    .task-bullet { color: var(--green); font-size: 18px; line-height: 1; }
-    .task-text { font-size: 14px; color: var(--text); font-weight: 500; }
-    .task-sub { font-size: 12px; color: var(--text3); margin-top: 4px; display: block; font-weight: 400; }
+    .task-bullet { font-size: 20px; line-height: 1; margin-top: 2px; }
+    .task-text { font-size: 15px; color: var(--text); font-weight: 500; }
+    .task-sub { font-size: 13px; color: var(--text3); margin-top: 6px; display: block; font-weight: 400; line-height: 1.5; }
 
     /* CODE */
     .code-window { background: #08080a; border: 1px solid var(--border2); border-radius: var(--r); overflow: hidden; margin: 20px 0; }
-    .code-header { background: #1a1a1f; padding: 10px 16px; font-size: 11px; color: var(--text3); display: flex; justify-content: space-between; border-bottom: 1px solid var(--border2); }
-    .code-body { padding: 20px; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: #a5b4fc; overflow-x: auto; }
+    body.light-theme .code-window { background: #1e1e2e; border-color: #1e1e2e; } /* Keep dark code theme in light mode */
+    .code-header { background: #1a1a1f; padding: 10px 16px; font-size: 11px; color: var(--text3); display: flex; justify-content: space-between; border-bottom: 1px solid #32323c; }
+    body.light-theme .code-header { background: #181825; color: #a6adc8; border-bottom: 1px solid #313244; }
+    .code-body { padding: 20px; font-family: var(--font-mono); font-size: 13.5px; line-height: 1.6; color: #cdd6f4; overflow-x: auto; tab-size: 2; white-space: pre; }
+    
+    .kw { color: #f38ba8; } /* Keyword: import, const, await */
+    .fn { color: #89b4fa; } /* Function: test, goto, expect */
+    .str { color: #a6e3a1; } /* String: '...' */
+    .obj { color: #f9e2af; } /* Object: page, expect */
+    .cmt { color: #6c7086; font-style: italic; } /* Comment */
 
     /* FOOTER */
     .footer { padding: 64px 24px; text-align: center; border-top: 1px solid var(--border); color: var(--text3); font-size: 14px; }
@@ -198,12 +206,12 @@
 <section class="hero">
   <div class="hero-badge">🎭 Expert Learning Series</div>
   <h1 class="hero-title">Ashlesha's <span class="highlight">Playwright</span> Guide</h1>
-  <p class="hero-subtitle">Click each phase below to unlock the secrets to professional E2E testing.</p>
+  <p class="hero-subtitle">Click each phase below to unlock real, runnable test examples built exactly to match the HireBoard app's code.</p>
 </section>
 
 <main class="main">
   <div class="section-header">
-    <span class="section-label">Your Roadmap</span>
+    <span class="section-label">Your Tailored Roadmap</span>
   </div>
 
   <!-- Phase 1 -->
@@ -223,18 +231,29 @@
           <div class="detail-body">
             <strong>End-to-End (E2E) testing</strong> means testing the entire application flow from start to finish. In HireBoard, this means starting at the landing page, logging in, and verifying you reach the dashboard—just like a real user.
             <br/><br/>
-            <strong>Playwright</strong> is Microsoft's answer to flaky tests. It is built to be "evergreen," meaning it handles modern web apps (React, Vue, etc.) effortlessly by automatically waiting for elements to appear before interacting with them.
+            <strong>Playwright</strong> is Microsoft's answer to flaky tests. It is built to be "evergreen," meaning it handles modern web apps (React, Vue, etc.) effortlessly by automatically waiting for elements to appear before interacting with them. Imagine a robot that actually looks at the screen before clicking—that's Playwright.
           </div>
         </div>
         <div class="detail-block">
           <div class="detail-heading">Understanding the Config</div>
           <div class="detail-body">
-            Open <code>playwright.config.ts</code>. This is the global remote control for your tests. It tells Playwright:
-            <ul style="margin-top: 12px; margin-left: 20px;">
-              <li>Where your tests are: <code>testDir: './tests/specs'</code></li>
-              <li>Your app's URL: <code>baseURL: 'http://localhost:5173'</code></li>
-              <li>How many retries: <code>retries: 1</code> (if a test fails once, try again)</li>
-            </ul>
+            Open <code>playwright.config.ts</code> in our repo. This is the global remote control for your tests. Notice these exact lines we set up for you:
+          </div>
+          <div class="code-window">
+            <div class="code-header"><span>playwright.config.ts</span></div>
+            <div class="code-body"><span class="kw">export default</span> <span class="fn">defineConfig</span>({
+  <span class="cmt">// Where your tests live:</span>
+  testDir: <span class="str">'./tests/specs'</span>,
+  
+  <span class="kw">use</span>: { 
+    <span class="cmt">// Setting the base URL means you can just type page.goto('/login')</span>
+    <span class="cmt">// instead of page.goto('http://localhost:5173/login')</span>
+    baseURL: <span class="str">'http://localhost:5173'</span>, 
+    
+    <span class="cmt">// Playwright will take a "trace" (a full snapshot of the test) on failures</span>
+    trace: <span class="str">'on-first-retry'</span> 
+  },
+});</div>
           </div>
         </div>
       </div>
@@ -247,35 +266,39 @@
       <div class="phase-icon p2">✍️</div>
       <div class="phase-info">
         <span class="phase-tag">Phase 2</span>
-        <span class="phase-title">First Test: The Power Four</span>
+        <span class="phase-title">First Test: Logging into HireBoard</span>
       </div>
       <div class="phase-arrow">↓</div>
     </button>
     <div class="phase-body">
       <div class="phase-content">
         <div class="detail-block">
-          <div class="detail-heading">The Basic Commands</div>
+          <div class="detail-heading">The Real Login Test</div>
           <div class="detail-body">
-            You only need 4 core commands to write 90% of your tests:
+            You only need 4 core commands to write 90% of your tests: <code>goto</code>, <code>getByTestId</code>, <code>fill/click</code>, and <code>expect</code>.
+            <br/><br/>
+            Look at this actual, runnable test. Copy this into a new file in <code>tests/specs/</code> and run it with <code>npx playwright test</code>. Notice how we use the exact <code>data-testid</code> attributes from the HireBoard codebase!
           </div>
-          <ul class="task-list">
-            <li class="task-item">
-              <span class="task-bullet">1</span>
-              <div class="task-text">page.goto(url) <span class="task-sub">Navigates the browser to a page.</span></div>
-            </li>
-            <li class="task-item">
-              <span class="task-bullet">2</span>
-              <div class="task-text">page.getByTestId(id) <span class="task-sub">Finds an element using the custom data-testid we added for you.</span></div>
-            </li>
-            <li class="task-item">
-              <span class="task-bullet">3</span>
-              <div class="task-text">locator.fill(text) / locator.click() <span class="task-sub">Types into an input or clicks a button.</span></div>
-            </li>
-            <li class="task-item">
-              <span class="task-bullet">4</span>
-              <div class="task-text">expect(locator).toBeVisible() <span class="task-sub">The "Assertion" — checking that the result is what you expected.</span></div>
-            </li>
-          </ul>
+          <div class="code-window">
+            <div class="code-header"><span>tests/specs/login.spec.ts</span></div>
+            <div class="code-body"><span class="kw">import</span> { <span class="obj">test</span>, <span class="obj">expect</span> } <span class="kw">from</span> <span class="str">'@playwright/test'</span>;
+
+<span class="fn">test</span>(<span class="str">'User can log in successfully'</span>, <span class="kw">async</span> ({ <span class="obj">page</span> }) => {
+  <span class="cmt">// 1. Navigate to the page</span>
+  <span class="kw">await</span> <span class="obj">page</span>.<span class="fn">goto</span>(<span class="str">'/login'</span>);
+
+  <span class="cmt">// 2. Locate inputs using the actual data-testids we put in Login.tsx</span>
+  <span class="kw">await</span> <span class="obj">page</span>.<span class="fn">getByTestId</span>(<span class="str">'email-input'</span>).<span class="fn">fill</span>(<span class="str">'applicant@test.com'</span>);
+  <span class="kw">await</span> <span class="obj">page</span>.<span class="fn">getByTestId</span>(<span class="str">'password-input'</span>).<span class="fn">fill</span>(<span class="str">'password123'</span>);
+
+  <span class="cmt">// 3. Click the submit button</span>
+  <span class="kw">await</span> <span class="obj">page</span>.<span class="fn">getByTestId</span>(<span class="str">'login-submit'</span>).<span class="fn">click</span>();
+
+  <span class="cmt">// 4. Assert: verify they are redirected and the navbar updates</span>
+  <span class="kw">await</span> <span class="obj">expect</span>(<span class="obj">page</span>).<span class="fn">toHaveURL</span>(<span class="str">/dashboard/</span>);
+  <span class="kw">await</span> <span class="obj">expect</span>(<span class="obj">page</span>.<span class="fn">getByTestId</span>(<span class="str">'nav-user-name'</span>)).<span class="fn">toContainText</span>(<span class="str">'Alice Applicant'</span>);
+});</div>
+          </div>
         </div>
       </div>
     </div>
@@ -296,17 +319,49 @@
         <div class="detail-block">
           <div class="detail-heading">Why POM?</div>
           <div class="detail-body">
-            If a button's ID changes and you have 20 tests using it, you don't want to edit 20 files. 
-            <strong>POM</strong> lets you define the "login button" once in a <code>LoginPage</code> class. All tests then use that class. Update it once, and every test is fixed instantly.
+            If the login button's ID changes from <code>login-submit</code> to <code>sign-in-submit</code>, and you have 20 tests logging in, you do not want to edit 20 files. POM centralizes elements into "Page Classes".
           </div>
         </div>
+        
         <div class="code-window">
-          <div class="code-header"><span>LoginPage.ts</span></div>
-          <div class="code-body">
-            export class LoginPage {<br/>
-            &nbsp;&nbsp;get emailInput() { return this.page.getByTestId('email-input'); }<br/>
-            &nbsp;&nbsp;async login(email, pass) { ... }<br/>
-            }
+          <div class="code-header"><span>tests/pages/LoginPage.ts</span></div>
+          <div class="code-body"><span class="kw">import</span> { <span class="obj">Page</span> } <span class="kw">from</span> <span class="str">'@playwright/test'</span>;
+
+<span class="kw">export class</span> LoginPage {
+  <span class="kw">constructor</span>(<span class="kw">public</span> <span class="obj">page</span>: <span class="obj">Page</span>) {}
+
+  <span class="cmt">// Define locators as getters</span>
+  <span class="kw">get</span> emailInput() { <span class="kw">return</span> <span class="kw">this</span>.<span class="obj">page</span>.<span class="fn">getByTestId</span>(<span class="str">'email-input'</span>); }
+  <span class="kw">get</span> passwordInput() { <span class="kw">return</span> <span class="kw">this</span>.<span class="obj">page</span>.<span class="fn">getByTestId</span>(<span class="str">'password-input'</span>); }
+  <span class="kw">get</span> submitBtn() { <span class="kw">return</span> <span class="kw">this</span>.<span class="obj">page</span>.<span class="fn">getByTestId</span>(<span class="str">'login-submit'</span>); }
+
+  <span class="cmt">// Define common actions</span>
+  <span class="kw">async</span> <span class="fn">login</span>(email: string, pass: string) {
+    <span class="kw">await</span> <span class="kw">this</span>.<span class="obj">page</span>.<span class="fn">goto</span>(<span class="str">'/login'</span>);
+    <span class="kw">await</span> <span class="kw">this</span>.emailInput.<span class="fn">fill</span>(email);
+    <span class="kw">await</span> <span class="kw">this</span>.passwordInput.<span class="fn">fill</span>(pass);
+    <span class="kw">await</span> <span class="kw">this</span>.submitBtn.<span class="fn">click</span>();
+  }
+}</div>
+        </div>
+
+        <div class="detail-block" style="margin-top: 24px;">
+          <div class="detail-body">
+            Now, look how clean your test file becomes! It reads like plain English:
+          </div>
+          <div class="code-window">
+            <div class="code-header"><span>tests/specs/login-clean.spec.ts</span></div>
+            <div class="code-body"><span class="kw">import</span> { <span class="obj">test</span>, <span class="obj">expect</span> } <span class="kw">from</span> <span class="str">'@playwright/test'</span>;
+<span class="kw">import</span> { LoginPage } <span class="kw">from</span> <span class="str">'../pages/LoginPage'</span>;
+
+<span class="fn">test</span>(<span class="str">'Clean POM Login Test'</span>, <span class="kw">async</span> ({ <span class="obj">page</span> }) => {
+  <span class="kw">const</span> loginPage = <span class="kw">new</span> <span class="fn">LoginPage</span>(<span class="obj">page</span>);
+  
+  <span class="cmt">// One line executes the entire sequence!</span>
+  <span class="kw">await</span> loginPage.<span class="fn">login</span>(<span class="str">'applicant@test.com'</span>, <span class="str">'pwd123'</span>);
+  
+  <span class="kw">await</span> <span class="obj">expect</span>(<span class="obj">page</span>).<span class="fn">toHaveURL</span>(<span class="str">/dashboard/</span>);
+});</div>
           </div>
         </div>
       </div>
@@ -334,7 +389,9 @@
         <div class="detail-block">
           <div class="detail-heading">Auto-recording with Codegen</div>
           <div class="detail-body">
-            Not sure how to write a test? Run <code>npx playwright codegen localhost:5173</code>. As you click around the app, Playwright will generate the code for you in a side window!
+            Not sure how to write a test or what locator to use? Playwright can write the code for you!
+            <br/><br/>
+            Run <code>npx playwright codegen localhost:5173</code>. As you click around the app and interact with it, Playwright will generate the exact code for you in a side window. Try it!
           </div>
         </div>
       </div>
@@ -354,20 +411,50 @@
     <div class="phase-body">
       <div class="phase-content">
         <div class="detail-block">
-          <div class="detail-heading">Test Scenarios</div>
-          <div class="detail-body">Try implementing these in the tests folder:</div>
+          <div class="detail-heading">Real Scenarios to write</div>
+          <div class="detail-body">Get some reps in! Try implementing these tests in the <code>tests/specs/</code> folder. I've given you the exact locators you'll need from the HireBoard codebase.</div>
           <ul class="task-list">
             <li class="task-item">
-              <span class="task-bullet">🎯</span>
-              <div class="task-text">The "Happy Path" Login <span class="task-sub">Login with applicant@test.com / password123 and verify the dashboard header appears.</span></div>
+              <span class="task-bullet">🔍</span>
+              <div>
+                <div class="task-text">Filter Jobs by Search</div>
+                <div class="task-sub">
+                  <strong>Goal:</strong> Go to the jobs page, type "UX" in the search box, and verify the list filters correctly.
+                  <br/><br/>
+                  <strong>Locators you'll need:</strong><br/>
+                  • <code>page.getByTestId('search-input')</code><br/>
+                  • <code>page.getByTestId('job-list')</code><br/>
+                  • <code>page.getByTestId('jobs-count')</code>
+                </div>
+              </div>
             </li>
             <li class="task-item">
-              <span class="task-bullet">🔍</span>
-              <div class="task-text">Job Search Filter <span class="task-sub">Go to browse jobs, type "UX" in the search box, and verify the list filters correctly.</span></div>
+              <span class="task-bullet">🔖</span>
+              <div>
+                <div class="task-text">Bookmark a Job</div>
+                <div class="task-sub">
+                  <strong>Goal:</strong> Login, go to jobs, click the save button on the first job (id 1), then verify it appears on your Bookmarks page.
+                  <br/><br/>
+                  <strong>Locators you'll need:</strong><br/>
+                  • <code>page.getByTestId('nav-jobs')</code><br/>
+                  • <code>page.getByTestId('bookmark-btn-1')</code><br/>
+                  • <code>page.getByTestId('nav-bookmarks')</code>
+                </div>
+              </div>
             </li>
             <li class="task-item">
               <span class="task-bullet">📝</span>
-              <div class="task-text">Employer Job Post <span class="task-sub">Login as employer@test.com, click "Post a Job", fill the form, and verify it shows in your dashboard.</span></div>
+              <div>
+                <div class="task-text">Employer Job Post</div>
+                <div class="task-sub">
+                  <strong>Goal:</strong> Login as <code>employer@test.com</code>, click the new job button, fill the form, submit, and verify it shows in your dashboard.
+                  <br/><br/>
+                  <strong>Locators you'll need:</strong><br/>
+                  • <code>page.getByTestId('post-job-btn')</code><br/>
+                  • <code>page.getByTestId('job-title-input')</code><br/>
+                  • <code>page.getByTestId('submit-job-btn')</code>
+                </div>
+              </div>
             </li>
           </ul>
         </div>
@@ -392,7 +479,7 @@
           <div class="detail-body">
             <strong>CI/CD:</strong> We have GitHub Actions setup. Every time you push code, our tests run automatically on servers in the cloud to catch bugs before they reach users.
             <br/><br/>
-            <strong>Visual Testing:</strong> <code>toHaveScreenshot()</code> takes a picture of your app and compares it to a baseline. If a single pixel changes (like a button moving slightly), it alerts you!
+            <strong>Visual Testing:</strong> <code>expect(page).toHaveScreenshot()</code> takes a picture of your app and compares it to a baseline. If a single pixel changes (like a button moving slightly or CSS breaking), it alerts you!
           </div>
         </div>
       </div>
